@@ -24,11 +24,15 @@ function wait3(t) {
 }
 
 function calculateTime(t1, t2, t3) {
-  return new Promise((resolve, reject) => {
-    const startTime = Date.now();
-    wait1(t1);
-    resolve();
-  }).then()
+  const startingTime = Date.now();
+  return wait1(t1).then(function() {
+     return wait2(t2)
+  }).then(function(){
+      return wait3(t3)
+  }).then(function(){
+      const endingTime = Date.now();
+      return endingTime - startingTime; 
+  })
 }
 
 module.exports = calculateTime;

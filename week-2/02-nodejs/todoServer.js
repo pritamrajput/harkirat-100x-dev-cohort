@@ -80,13 +80,44 @@
 
   app.put('/todos/:id', function(req, res){
    const todoItemId = parseInt(req.params.id);
-     
-   const todo = todos.find((item)=>{
-    return item.id === todoItemId;
-   });
+   let isUpdated = ''; 
+  for (const item of todos) {
+    if(item.id === todoItemId){
+     item.title = req.body.title;
+     item.description = req.body.description;
+     isUpdated = true;
+    }
+  }
 
-   
+   if(isUpdated){
+     res.json();
+   }
+   else{
+    res.status(404).json();
+   }
 
   });
+
+
+  app.delete('/todos/:id', function(req, res){
+    const todoItemId = parseInt(req.params.id);
+    let isDeleted = "";
+     for (const [i, item] of todos.entries()) {
+       if(todoItemId === item.id){
+         todos.splice(i,1);
+         isDeleted = true;
+       }
+     }
+
+     if(isDeleted){
+       res.json();
+     }
+     else{
+      res.status(404).json();
+     }
+  })
   
+  app.all("*",function(req,res){
+    res.status(404).send('Route not found');
+  })
   module.exports = app;
